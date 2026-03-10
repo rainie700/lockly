@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>密碼強度動態評估系統</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 登入 / 註冊畫面（未登入時顯示）-->
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <img src="images/logo.png" alt="Logo" class="auth-logo">
+      <h1>密碼強度動態評估</h1>
+      <p class="auth-subtitle">請登入或註冊以繼續</p>
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab active" data-tab="login">登入</button>
+        <button type="button" class="auth-tab" data-tab="register">註冊</button>
+      </div>
+      <form id="authForm" class="auth-form" novalidate>
+        <input type="email" id="authEmail" placeholder="電子郵件" required autocomplete="email">
+        <input type="password" id="authPassword" placeholder="密碼" required autocomplete="current-password">
+        <p id="authError" class="auth-error"></p>
+        <button type="submit" id="authSubmit">登入</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 主應用（登入後顯示）-->
+  <div id="mainApp" class="app" hidden>
+    <header>
+      <div class="header-row">
+        <div>
+          <img src="images/logo.png" alt="Logo" class="site-logo">
+          <h1>密碼強度動態評估與管理</h1>
+          <p class="subtitle">資訊熵 × 馬可夫鏈 × 洩漏檢測 × 模式偵測</p>
+        </div>
+        <button type="button" id="logoutBtn" class="logout-btn">登出</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="card evaluator">
+        <h2>密碼強度即時評估</h2>
+        <div class="input-group">
+          <input type="password" id="passwordInput" placeholder="輸入密碼進行分析..." autocomplete="new-password">
+          <button type="button" id="toggleVisibility" aria-label="切換顯示">👁</button>
+        </div>
+        
+        <div id="strengthMeter" class="strength-meter">
+          <div class="meter-bar"></div>
+          <span class="meter-label">強度：—</span>
+        </div>
+        
+        <div class="metrics">
+          <div class="metric">
+            <span class="metric-label">資訊熵 H(X)</span>
+            <span id="entropy" class="metric-value">— bits</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">馬可夫調整分數</span>
+            <span id="markovScore" class="metric-value">—</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">洩漏狀態</span>
+            <span id="pwnedStatus" class="metric-value">—</span>
+          </div>
+        </div>
+        
+        <div id="warnings" class="warnings"></div>
+        <div id="recommendations" class="recommendations"></div>
+      </section>
+
+      <section class="card vault">
+        <h2>密碼庫</h2>
+        <p class="hint">使用主密碼加密，僅儲存在本機瀏覽器</p>
+        <p class="vault-explain">主密碼用來加密你儲存的網站密碼。第一次使用請輸入主密碼並點「初始化」建立密碼庫；之後每次要查看或新增密碼，輸入主密碼並點「解鎖」即可。</p>
+        <div class="vault-controls">
+          <input type="password" id="masterPassword" placeholder="輸入主密碼">
+          <button id="unlockVault">解鎖 / 初始化</button>
+        </div>
+        <div id="vaultStatus" class="vault-status"></div>
+        <div id="vaultEntries" class="vault-entries"></div>
+        <div class="add-entry">
+          <input id="newSite" placeholder="網站/服務">
+          <input type="password" id="newPassword" placeholder="密碼">
+          <button id="addEntry">新增</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>使用 Have I Been Pwned API 與 Web Crypto API · 僅送出雜湊前 5 字元</p>
+    </footer>
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
